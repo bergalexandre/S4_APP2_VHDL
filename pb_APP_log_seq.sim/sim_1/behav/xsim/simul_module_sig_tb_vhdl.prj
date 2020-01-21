@@ -1,0 +1,33 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/attenateur_pwm.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/calcul_param_1.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/calcul_param_2.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/calcul_param_3.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/circuit_tr_signal.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/ctrl_i2c_V4_codec_ssm2603.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/gen_clk_codec.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/i2c_master.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/init_codec_v2.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/module_sig.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/sig_fct_1.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/sig_fct_2.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/sig_fct_3.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/strb_gen_v3.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/synchro_codec_v1.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/synchro_demo_codec_v4.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/affhex_pmodssd_v3.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/conditionne_btn_v7.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/module_commande.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/codeur_i2s_vsb.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/decodeur_i2s_v1b.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/mef_decod_i2s_v1b.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/reg_dec_24b_fd.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/reg_dec_24b.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/mef_cod_i2s_vsb.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/compteur_nbits.vhd" \
+"../../../../pb_APP_log_seq.srcs/sources_1/new/reg_24b.vhd" \
+"../../../../pb_APP_log_seq.srcs/sim_1/new/simul_module_sig_tb.vhd" \
+
+# Do not sort compile order
+nosort
