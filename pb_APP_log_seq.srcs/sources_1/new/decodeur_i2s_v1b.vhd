@@ -47,7 +47,7 @@ end decodeur_i2s_v1b;
 
 architecture Behavioral of decodeur_i2s_v1b is
 
-component mef_decod_i2s_v1b is
+component decodeur_true_MEF is
   Port ( 
     i_bclk      : in std_logic;
     i_reset     : in    std_logic; 
@@ -63,6 +63,21 @@ component mef_decod_i2s_v1b is
 );
 end component;
 
+component mef_decod_i2s_v1b is
+  Port ( 
+    i_bclk      : in std_logic;
+    i_reset     : in    std_logic; 
+    i_lrc       : in std_logic;
+    i_cpt_bits  : in std_logic_vector(6 downto 0);
+  --  
+    o_bit_enable     : out std_logic ;  --
+    o_load_left      : out std_logic ;  --
+    o_load_right     : out std_logic ;  --
+    o_str_dat        : out std_logic ;  --  
+    o_cpt_bit_reset  : out std_logic   -- 
+    
+);
+end component;
 
 component reg_dec_24b 
   Port ( 
@@ -114,7 +129,8 @@ end component;
 
 begin
 
-inst_MEF_decod1b : mef_decod_i2s_v1b
+-- decodeur_true_MEF  mef_decod_i2s_v1b
+inst_MEF_decod1b : decodeur_true_MEF
 port  map
  ( 
   i_bclk           => i_bclk,  

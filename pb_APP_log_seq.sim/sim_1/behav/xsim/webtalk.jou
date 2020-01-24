@@ -1,12 +1,12 @@
 #-----------------------------------------------------------
-# Webtalk v2018.2.2 (64-bit)
-# SW Build 2348494 on Mon Oct  1 18:25:44 MDT 2018
-# IP Build 2318053 on Mon Oct  1 21:44:26 MDT 2018
-# Start of session at: Thu May 16 17:17:12 2019
-# Process ID: 7340
-# Current directory: C:/ProjetsFPGA/projets_vivado/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim
-# Command line: wbtcv.exe -mode batch -source C:/ProjetsFPGA/projets_vivado/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim/xsim.dir/simul_module_sig_tb_behav/webtalk/xsim_webtalk.tcl -notrace
-# Log file: C:/ProjetsFPGA/projets_vivado/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim/webtalk.log
-# Journal file: C:/ProjetsFPGA/projets_vivado/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim\webtalk.jou
+# Webtalk v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Thu Jan 23 16:17:27 2020
+# Process ID: 10684
+# Current directory: C:/university/S4GI/APP2/pb_APP_log_seq.xpr/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim
+# Command line: wbtcv.exe -mode batch -source C:/university/S4GI/APP2/pb_APP_log_seq.xpr/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim/xsim.dir/simul_module_sig_tb_behav/webtalk/xsim_webtalk.tcl -notrace
+# Log file: C:/university/S4GI/APP2/pb_APP_log_seq.xpr/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim/webtalk.log
+# Journal file: C:/university/S4GI/APP2/pb_APP_log_seq.xpr/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim\webtalk.jou
 #-----------------------------------------------------------
-source C:/ProjetsFPGA/projets_vivado/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim/xsim.dir/simul_module_sig_tb_behav/webtalk/xsim_webtalk.tcl -notrace
+source C:/university/S4GI/APP2/pb_APP_log_seq.xpr/pb_APP_log_seq/pb_APP_log_seq.sim/sim_1/behav/xsim/xsim.dir/simul_module_sig_tb_behav/webtalk/xsim_webtalk.tcl -notrace

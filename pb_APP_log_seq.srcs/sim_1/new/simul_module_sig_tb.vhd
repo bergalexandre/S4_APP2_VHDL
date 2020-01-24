@@ -42,17 +42,17 @@ component codeur_i2s_vsb
 end component;
 
 -- pour tests futurs d'un decodeur
---component decodeur_i2s_vsb
---  Port ( 
---      i_bclk      : in std_logic;
---      i_reset      : in std_logic;
---      i_lrc       : in std_logic;
---      i_dat       : in std_logic;
---      o_dat_left  : out  std_logic_vector(23 downto 0);
---      o_dat_right : out  std_logic_vector(23 downto 0);
---      o_str_dat   : out std_logic
---);
---end component;
+component decodeur_i2s_vsb
+  Port ( 
+      i_bclk      : in std_logic;
+      i_reset      : in std_logic;
+      i_lrc       : in std_logic;
+      i_dat       : in std_logic;
+      o_dat_left  : out  std_logic_vector(23 downto 0);
+      o_dat_right : out  std_logic_vector(23 downto 0);
+      o_str_dat   : out std_logic
+);
+end component;
 
 
 
@@ -257,18 +257,18 @@ begin
         o_statut    =>  d_led
     );
   
---    prevu pour test d'un decodeur
---    UUT_decodeur: decodeur_i2s_vsb
---     Port map
---        ( 
---          i_bclk      =>  d_ac_bclk,
---          i_reset     =>  s_reset,
---          i_lrc       =>  d_ac_pblrc,
---          i_dat       =>  d_sig_pbdat,
---          o_dat_left  =>  d_ech_reg_left,
---          o_dat_right =>  d_ech_reg_right,
---          o_str_dat   =>  open
---      );
+--   prevu pour test d'un decodeur
+   UUT_decodeur: decodeur_i2s_vsb
+     Port map
+        ( 
+          i_bclk      =>  d_ac_bclk,
+          i_reset     =>  s_reset,
+          i_lrc       =>  d_ac_pblrc,
+          i_dat       =>  d_sig_pbdat,
+          o_dat_left  =>  d_ech_reg_left,
+          o_dat_right =>  d_ech_reg_right,
+          o_str_dat   =>  open
+      );
     
   
   
