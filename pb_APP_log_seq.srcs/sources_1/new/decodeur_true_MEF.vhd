@@ -83,16 +83,16 @@ begin
         else
             case decodeur_etatCourant is 
                 when decodeur_init => 
-                        if i_lrc  = decodeur_secondeLecture then
-                            decodeur_secondeLecture <= not decodeur_secondeLecture;
-                            decodeur_etatSuivant <= decodeur_depart;
-                        end if;
+                    if i_lrc  = decodeur_secondeLecture then
+                        decodeur_secondeLecture <= not decodeur_secondeLecture;
+                        decodeur_etatSuivant <= decodeur_depart;
+                    end if;
                 when decodeur_depart =>
-                    if i_cpt_bits  = "0000010" then
+                    if i_cpt_bits  = "0000000" then
                         decodeur_etatSuivant <= decodeur_Attend;
                     end if;
                 when decodeur_Attend =>
-                    if i_cpt_bits  = "0011001" then
+                    if i_cpt_bits  = "0010110" then
                         decodeur_etatSuivant <= decodeur_sauvegarde;
                     end if;
                 when decodeur_sauvegarde =>
@@ -107,42 +107,41 @@ begin
         end if;
     end process;
   
-  sortie: process(decodeur_etatCourant)
-  begin
-  
-   case decodeur_etatCourant is
-        when decodeur_init =>
-            o_cpt_bit_reset    <= '1';
-            o_bit_enable     <= '0';
-            o_load_left      <= '0';
-            o_load_right     <= '0';
-            o_str_dat     <= '0';
-       when decodeur_depart =>
-             o_cpt_bit_reset    <= '0';
-             o_bit_enable     <= '0';
-             o_load_left      <= '0';
-             o_load_right     <= '0';
-             o_str_dat     <= '0';
-        when decodeur_Attend=>
-            o_cpt_bit_reset    <= '0';
-            o_bit_enable     <= '1';
-            o_load_left      <= '0';
-            o_load_right     <= '0';
-            o_str_dat     <= '0';
-        when decodeur_sauvegarde=>
-            o_cpt_bit_reset    <= '1';
-            o_bit_enable     <= '0';
-            o_load_left      <= not i_lrc;
-            o_load_right     <= i_lrc;
-            o_str_dat     <= '0';
-         when decodeur_fin=>
-            o_cpt_bit_reset    <= '0';
-            o_bit_enable     <= '0';
-            o_load_left      <= '0';
-            o_load_right     <= '0';
-            o_str_dat     <= '1';
-     end case; 
-     end process;
+    sortie: process(decodeur_etatCourant)
+    begin
+        case decodeur_etatCourant is
+            when decodeur_init =>
+                o_cpt_bit_reset     <= '1';
+                o_bit_enable        <= '1';
+                o_load_left         <= '0';
+                o_load_right        <= '0';
+                o_str_dat           <= '0';
+            when decodeur_depart =>
+                o_cpt_bit_reset    <= '0';
+                o_bit_enable       <= '1';
+                o_load_left        <= '0';
+                o_load_right       <= '0';
+                o_str_dat          <= '0';
+            when decodeur_Attend=>
+                o_cpt_bit_reset     <= '0';
+                o_bit_enable        <= '1';
+                o_load_left         <= '0';
+                o_load_right        <= '0';
+                o_str_dat           <= '0';
+            when decodeur_sauvegarde=>
+                o_cpt_bit_reset     <= '1';
+                o_bit_enable        <= '0';
+                o_load_left         <= not i_lrc;
+                o_load_right        <= i_lrc;
+                o_str_dat           <= '0';
+            when decodeur_fin=>
+                o_cpt_bit_reset     <= '0';
+                o_bit_enable        <= '0';
+                o_load_left         <= '0';
+                o_load_right        <= '0';
+                o_str_dat           <= '1';
+        end case; 
+    end process;
 
 
 end Behavioral;
