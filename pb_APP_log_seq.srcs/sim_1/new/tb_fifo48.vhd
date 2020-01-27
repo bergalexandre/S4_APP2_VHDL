@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all; -- this is the standard package where signed is defined
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -39,7 +40,6 @@ architecture Behavioral of tb_fifo48 is
 
     component fifo48 is
         Port (
-            i_clk_codec : in STD_LOGIC;
             i_read      : in STD_LOGIC;
             i_write     : in STD_LOGIC;
             i_value     : in STD_LOGIC_VECTOR(23 downto 0);
@@ -49,7 +49,7 @@ architecture Behavioral of tb_fifo48 is
     
     signal clk : STD_LOGIC := '0';
     constant clock : time := 100ns;
-    
+    constant zero : STD_LOGIC_VECTOR(23 downto 0) := x"000000";
     signal i_read : STD_LOGIC := '0';
     signal i_write : STD_LOGIC := '0';
     signal i_value : STD_LOGIC_VECTOR(23 downto 0) := (others=>'0');
@@ -58,7 +58,6 @@ architecture Behavioral of tb_fifo48 is
 begin
     
     inst_fifo48 : fifo48 port map (
-            i_clk_codec => clk,
             i_read  => i_read,
             i_write => i_write,
             i_value => i_value,
@@ -89,7 +88,7 @@ begin
         wait for clock;
         
         i_write <= '1';
-        i_value <= x"001000";
+        i_value <= x"d00000";
         wait for clock;
         i_write <= '0';
         wait for clock;
@@ -100,7 +99,7 @@ begin
         wait for clock;
         
         i_write <= '1';
-        i_value <= x"010000";
+        i_value <= STD_LOGIC_VECTOR(signed(zero) - signed(i_value));
         wait for clock;
         i_write <= '0';
         wait for clock;

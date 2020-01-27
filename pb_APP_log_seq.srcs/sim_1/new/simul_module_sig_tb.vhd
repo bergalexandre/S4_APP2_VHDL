@@ -42,7 +42,7 @@ component codeur_i2s_vsb
 end component;
 
 -- pour tests futurs d'un decodeur
-component decodeur_i2s_vsb
+component decodeur_i2s_v1b
   Port ( 
       i_bclk      : in std_logic;
       i_reset      : in std_logic;
@@ -54,7 +54,15 @@ component decodeur_i2s_vsb
 );
 end component;
 
-
+component param_amplitude is
+    Port ( 
+        i_value     : in STD_LOGIC_VECTOR(23 downto 0);
+        i_dat_str   : in STD_LOGIC;
+        o_value     : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+end component;
+signal amplitude : STD_LOGIC_VECTOR(7 downto 0);
+signal o_str_dat : STD_LOGIC;
 
 component module_sig
    Port (
@@ -70,7 +78,18 @@ component module_sig
     o_statut    : out   std_logic_vector (3 downto 0)
     );
 end component;
-  
+
+component param_puissance is
+    Port (
+        i_value : in STD_LOGIC_VECTOR(23 downto 0);
+        i_dat_str : in STD_LOGIC;
+        i_puissance : in STD_LOGIC_VECTOR(15 downto 0);
+        o_puissance : out STD_LOGIC_VECTOR(15 downto 0);
+        o_aff : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+end component;
+signal puissance : STD_LOGIC_VECTOR(7 downto 0) := (others=>'0');
+signal puissance_16bits : STD_LOGIC_VECTOR(15 downto 0) := (others=>'0');
   
 --type table_forme is array (integer range 0 to 255) of std_logic_vector(23 downto 0);
 type table_forme is array (integer range 0 to 47) of std_logic_vector(23 downto 0);
@@ -238,7 +257,7 @@ begin
       i_reset     =>  s_reset,
       i_lrc       =>  d_ac_pblrc,
       i_dat_left  =>  d_val_ech_L,
-      i_dat_right =>  d_val_ech_R,
+      i_dat_right =>  x"7fffff",
       o_dat       =>  d_ac_recdat
   );
 
@@ -258,7 +277,7 @@ begin
     );
   
 --   prevu pour test d'un decodeur
-   UUT_decodeur: decodeur_i2s_vsb
+   UUT_decodeur: decodeur_i2s_v1b
      Port map
         ( 
           i_bclk      =>  d_ac_bclk,
@@ -267,9 +286,22 @@ begin
           i_dat       =>  d_sig_pbdat,
           o_dat_left  =>  d_ech_reg_left,
           o_dat_right =>  d_ech_reg_right,
-          o_str_dat   =>  open
+          o_str_dat   =>  o_str_dat
       );
     
+    inst_param_amplitude : param_amplitude port map(
+        i_value => d_ech_reg_right,
+        i_dat_str => o_str_dat,
+        o_value => amplitude
+    );    
+    
+    inst_param_puissance : param_puissance Port map(
+        i_value => d_ech_reg_right,
+        i_dat_str => o_str_dat,
+        i_puissance => puissance_16bits, 
+        o_puissance => puissance_16bits,
+        o_aff => puissance
+    );
   
   
    ----------------------------------------------------------------------------

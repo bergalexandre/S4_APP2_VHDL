@@ -34,11 +34,12 @@ use ieee.numeric_std.all; -- this is the standard package where signed is define
 
 entity fifo48 is
     Port (
-        i_clk_codec : in STD_LOGIC;
         i_read      : in STD_LOGIC;
         i_write     : in STD_LOGIC;
         i_value     : in STD_LOGIC_VECTOR(23 downto 0);
-        o_value     : out STD_LOGIC_VECTOR(23 downto 0)
+        o_value     : out STD_LOGIC_VECTOR(23 downto 0);
+        o_plein     : out STD_LOGIC;
+        o_vide      : out STD_LOGIC
     );
 end fifo48;
 
@@ -79,17 +80,24 @@ begin
                 o_value <= (others=>'0');
             when fifo_read =>
                 if number_of_item = "000000" then
-                    o_value <= (others=>'0'); 
+                    o_value <= (others=>'0');
+                    o_vide <= '1'; 
                 else
                     o_value <= fifo(to_integer(unsigned(queue_position)));
                     number_of_item <= STD_LOGIC_VECTOR(unsigned(number_of_item) - 1);
                     queue_position <= STD_LOGIC_VECTOR((unsigned(queue_position) + 1) mod unsigned(FIFO_MAX));
+                    o_vide <= '0';
+                    o_plein <= '0';
                 end if;
             when fifo_write =>
                 if number_of_item /= FIFO_MAX then
                     fifo(to_integer(unsigned(head_position))) <= i_value;
                     number_of_item <= STD_LOGIC_VECTOR(unsigned(number_of_item) + 1);
                     head_position <= STD_LOGIC_VECTOR((unsigned(head_position) + 1) mod unsigned(FIFO_MAX));
+                    o_plein <= '0';
+                    o_vide <= '0';
+                else
+                    o_plein <= '1';
                 end if;
         end case;
     end PROCESS;
