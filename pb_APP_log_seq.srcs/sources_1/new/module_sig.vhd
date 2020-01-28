@@ -44,7 +44,6 @@ entity module_sig is
     i_bclk    : in    std_logic;  -- bit clock I2S digital audio clk ~  3.1 MHz 
     i_lrc     : in    std_logic;  -- I²S (Playback Channel Clock)    ~ 48.3 KHz
     i_recdat  : in    std_logic;  -- I²S (Record Data) en provenance du CODEC
-    i_btn1    : in    std_logic;
     o_pbdat   : out   std_logic;  -- I²S (Playback Data) vers le CODEC
     --
     i_sel_fct : in    std_logic_vector (1 downto 0); -- selecteur de la fonction
@@ -123,7 +122,6 @@ Port (
         param_3 : in STD_LOGIC_VECTOR(7 downto 0);
         param_4 : in STD_LOGIC_VECTOR(7 downto 0);
         selection : in STD_LOGIC_VECTOR(1 downto 0);
-        btn1 : in STD_LOGIC;
         sortie : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end component;
@@ -191,7 +189,6 @@ component codeur_i2s_vsb
 --    Description (sur une carte Zybo)
 ---------------------------------------------------------------------------------------------
 begin
-     d_btn1      <= i_btn1;
      d_bclk      <= i_bclk;
      reset       <= i_reset;
      d_lrc       <= i_lrc;
@@ -282,7 +279,6 @@ d_ech_left_out <= d_ech_left_dec; -- canal gauche non tranformé
             param_3 => d_param_2,
             param_4 => d_param_3,
             selection => d_sel_par,
-            btn1 => d_btn1,
             sortie => d_param
         );
 

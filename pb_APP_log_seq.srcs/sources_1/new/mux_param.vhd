@@ -38,7 +38,6 @@ Port (
         param_3 : in STD_LOGIC_VECTOR(7 downto 0);
         param_4 : in STD_LOGIC_VECTOR(7 downto 0);
         selection : in STD_LOGIC_VECTOR(1 downto 0);
-        btn1 : in STD_LOGIC;
         sortie : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end mux_param;
@@ -46,16 +45,14 @@ end mux_param;
 architecture Behavioral of mux_param is
 
 begin
-    selection_function : PROCESS(selection, param_1, param_2, param_3, param_4, btn1)
+    selection_function : PROCESS(selection, param_1, param_2, param_3, param_4)
     
     begin
         case selection is 
             when "00" =>
                 sortie <= param_1;
             when "01" =>
-                if btn1 = '1' then
-                    sortie <= param_2;
-                end if;
+                sortie <= param_2;
             when "10" =>
                 sortie <= param_3;
             when "11" =>

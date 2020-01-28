@@ -81,7 +81,6 @@ component module_sig
     i_bclk      : in    std_logic;    -- bit clock ... I2S digital audio clk  ~  3.1 MHz 
     i_lrc       : in    std_logic;    -- I²S (Playback Channel Clock)         ~ 48.3 KHz (~ 20.8 us)
     i_recdat    : in    std_logic;    -- I²S (Record Data)
-    i_btn1      : in    std_logic;
     o_pbdat     : out   std_logic;    -- I²S (Playback Data)
     --
     i_sel_fct   : in    std_logic_vector (1 downto 0); -- selecteur de la fonction
@@ -100,6 +99,22 @@ component param_puissance is
         o_aff : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end component;
+
+component module_commande IS
+generic (nbtn : integer := 4;  mode_seq_bouton: std_logic := '0'; mode_simulation: std_logic := '0');
+    PORT (
+          clk          : in  std_logic;
+          o_reset      : out  std_logic; 
+          i_btn        : in  std_logic_vector (nbtn-1 downto 0); -- signaux directs des boutons
+          i_sw         : in  std_logic_vector (3 downto 0);      -- signaux directs des interrupteurs
+          o_btn_cd     : out std_logic_vector (nbtn-1 downto 0); -- signaux conditionnés 
+          o_selection_fct  :  out std_logic_vector(1 downto 0);
+          o_selection_par  :  out std_logic_vector(1 downto 0)
+          );
+end component;
+
+
+
 signal puissance, frequence : STD_LOGIC_VECTOR(7 downto 0) := (others=>'0');
 signal puissance_16bits : STD_LOGIC_VECTOR(15 downto 0) := (others=>'0');
 
@@ -217,6 +232,11 @@ x"A00001"
 --others => x"000000"  --
 );
 
+    signal   d_clk_p     : std_logic := '0';   -- bit clock ... horloge I2S digital audio
+    
+    signal d_sw          :    std_logic_vector (3 downto 0) := "0000";  -- 4 bits sur Zybo
+    signal d_btn        :    std_logic_vector (3 downto 0) := "0000";
+    signal d_btn_cd        :    std_logic_vector (3 downto 0) := "0000";
 
     signal   d_ac_bclk     : std_logic := '0';   -- bit clock ... horloge I2S digital audio
     signal   d_ac_mclk     : std_logic := '0';   -- Master Clock horloge 12.288 MHz
@@ -283,7 +303,6 @@ begin
         i_bclk      =>  d_ac_bclk,
         i_lrc       =>  d_ac_pblrc,
         i_recdat    =>  d_ac_recdat,
-        i_btn1      =>  '1',
         o_pbdat     =>  d_sig_pbdat,
         i_sel_fct   =>  d_sel_fct,
         i_sel_par   =>  d_sel_par,
@@ -325,6 +344,19 @@ begin
         i_puissance => puissance_16bits, 
         o_puissance => puissance_16bits,
         o_aff => puissance
+    );
+    
+d_clk_p <= not d_clk_p after 20ns;    
+    
+    inst_module_commande: module_commande Port map(
+          clk               =>  d_clk_p,
+          o_reset           =>  open,
+          i_btn             =>  d_btn,
+          i_sw              =>  d_sw,
+          o_btn_cd          =>  d_btn_cd,
+          o_selection_fct   =>  d_sel_fct,
+          o_selection_par   =>  d_sel_par
+    
     );
   
   
@@ -425,32 +457,36 @@ end process;
         wait for c_mclk_Period;
         s_reset   <= '0';
         
-        d_sel_fct <= "00";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "00";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "00";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "00";  d_sel_par <= "11";  wait for 40 us; 
-        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
-        --
-        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "01";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "01";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "01";  d_sel_par <= "11";  wait for 40 us;  
-        --
-        d_sel_fct <= "10";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "10";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "10";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "10";  d_sel_par <= "11";  wait for 40 us;              
-        --
-        d_sel_fct <= "11";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "11";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "11";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "11";  d_sel_par <= "11";  wait for 40 us;  
+        d_btn_cd <= "0000";
+        d_btn(1) <= '1';
+        
+        d_sw <= "0000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "0000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "0000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "0000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us; 
+        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        
+        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;  
+        
+        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;              
+        
+        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;   
         --          
-        d_sel_fct <= "00";
-        d_sel_par <= "00"; 
+        d_sw <= "0000";
+        d_sw <= "0000"; 
         wait for 40 us;   
                  
         WAIT; -- will wait forever
      END PROCESS;
+     
 
 end Behavioral;
