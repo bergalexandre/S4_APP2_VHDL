@@ -181,11 +181,13 @@ begin
     begin
         if abs(signed(i_dat24)) < signed(SEUIL) then
             sortie <= unsigned(sim_i_dat24_base);
-        elsif index > 95 then
+        elsif to_integer(unsigned(sim_i_dat24_second(23 downto 16))) < 96 then
+            sortie <=  mem_fct_douce(to_integer(unsigned(sim_i_dat24_second(22 downto 16))));
+        else
             --sortie <= x"200000";
-            sortie <= not (mem_fct_douce(to_integer(unsigned(128- index)))) + UNITE_24b;
-        elsif index < 96 then
-            sortie <=  mem_fct_douce(to_integer(unsigned(index(6 downto 0))));
+            
+            sortie <= not (mem_fct_douce(to_integer(unsigned(160 - index)))) + UNITE_24b;
+
         end if;
     end PROCESS;
     
