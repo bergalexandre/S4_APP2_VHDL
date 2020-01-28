@@ -214,6 +214,7 @@ inst_decod_i2s: decodeur_i2s_v1b
           o_str_dat   =>  d_str_dat_i2s
         );
 
+d_ech_fct <= d_ech_right_dec;
 d_ech_left_out <= d_ech_left_dec; -- canal gauche non tranformé
 
 -- codeur I2S
@@ -224,7 +225,7 @@ d_ech_left_out <= d_ech_left_dec; -- canal gauche non tranformé
           i_reset      => reset,
           i_lrc       =>  d_lrc,
           o_dat       =>  d_pbdat,
-          i_dat_left  =>  d_ech_left_out,
+          i_dat_left  =>  d_ech_tst,
           i_dat_right =>  d_ech_fct
         );
 
@@ -274,7 +275,7 @@ d_ech_left_out <= d_ech_left_dec; -- canal gauche non tranformé
         );
     
     inst_mux_param : mux_param Port map(
-            param_1 => d_ech_tst(23 downto 16),
+            param_1 => x"00",
             param_2 => d_param_1,
             param_3 => d_param_2,
             param_4 => d_param_3,

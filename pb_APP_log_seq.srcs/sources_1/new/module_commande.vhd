@@ -46,74 +46,83 @@ end component;
 BEGIN 
     
                   
- inst_cond_btn:  conditionne_btn_v7
-    generic map (nbtn => nbtn, mode_simul => mode_simulation)
-    port map(
-        clk           => clk,
-        i_btn         => i_btn,
-        o_btn_db      => d_btn_cd,
-        o_strobe_btn  => d_strobe_btn  
-         );
+-- inst_cond_btn:  conditionne_btn_v7
+--    generic map (nbtn => nbtn, mode_simul => mode_simulation)
+--    port map(
+--        clk           => clk,
+--        i_btn         => i_btn,
+--        o_btn_db      => d_btn_cd,
+--        o_strobe_btn  => d_strobe_btn  
+--         );
+    d_btn_cd <= i_btn;
+--    clk_btn0 <= not clk_btn0 after 200ms;
  
-    clk_btn0 <= not clk_btn0 after 50us;
- 
-  MEF_btn0: process(clk_btn0)
-    begin
-        case fsm_aff is
-            when S1 =>
-                if i_btn(0) = '1' then
-                        fsm_aff <= S1_off;
-                end if;
-            when S1_off =>
-                if i_btn(0) = '0' then
-                    fsm_aff <= S2;
-                end if;
-            when S2 =>
-                if i_btn(0) = '1' then
-                        fsm_aff <= S2_off;
-                end if;
-            when S2_off =>
-                if i_btn(0) = '0' then
-                    fsm_aff <= S3;
-                end if;
-            when S3 =>
-                if i_btn(0) = '1' then
-                        fsm_aff <= S3_off;
-                end if;
-            when S3_off =>
-                if i_btn(0) = '0' then
-                    fsm_aff <= S4;
-                end if;
-            when S4 =>
-                if i_btn(0) = '1' then
-                        fsm_aff <= S4_off;
-                end if;
-            when S4_off =>
-                if i_btn(0) = '0' then
-                    fsm_aff <= S1;
-                end if;
-        end case;
-    end process;
+--  MEF_btn0: process(clk_btn0)
+--    begin
+--        if rising_edge(clk_btn0) then
+--            fsm_aff <= fsm_aff_suiv;
+--        end if;
+--    end Process;
+
+--    set_etat : process(i_btn)
+    
+--    begin
+--            case fsm_aff is
+--                when S1 =>
+--                    if rising_edge(i_btn(0)) then
+--                        fsm_aff_suiv <= S1_off;
+--                    end if;
+--                when S1_off =>
+--                    if i_btn(0) = '0' then
+--                        fsm_aff_suiv <= S2;
+--                    end if;
+--                when S2 =>
+--                    if rising_edge(i_btn(0)) then
+--                        fsm_aff_suiv <= S2_off;
+--                    end if;
+--                when S2_off =>
+--                    if i_btn(0) = '0' then
+--                        fsm_aff_suiv <= S3;
+--                    end if;
+--                when S3 =>
+--                    if rising_edge(i_btn(0)) then
+--                            fsm_aff_suiv <= S3_off;
+--                    end if;
+--                when S3_off =>
+--                    if i_btn(0) = '0' then
+--                        fsm_aff_suiv <= S4;
+--                    end if;
+--                when S4 =>
+--                    if rising_edge(i_btn(0)) then
+--                            fsm_aff_suiv <= S4_off;
+--                    end if;
+--                when S4_off =>
+--                    if i_btn(0) = '0' then
+--                        fsm_aff_suiv <= S1;
+--                    end if;
+--            end case;
+--    end process;
     
     
-    MEF_output: process(fsm_aff)
-    begin
-        case fsm_aff is
-            when S1 =>
-                o_btn0 <= "00";
-            when S2 =>
-                o_btn0 <= "01";
-            when S3 =>
-                o_btn0 <= "10";
-            when S4 =>
-                o_btn0 <= "11";
-            when others =>
-        end case;
-    end process;
+--    MEF_output: process(fsm_aff)
+--    begin
+--        case fsm_aff is
+--            when S1 =>
+--                o_btn0 <= "00";
+--            when S2 =>
+--                o_btn0 <= "01";
+--            when S3 =>
+--                o_btn0 <= "10";
+--            when S4 =>
+--                o_btn0 <= "11";
+--            when others =>
+--                o_btn0 <= o_btn0;
+--        end case;
+--    end process;
 
  
    o_btn_cd        <= d_btn_cd;
-   o_selection_par <= o_btn0; -- mode de selection du parametre par sw
+   o_selection_par <= i_sw(1 downto 0); -- mode de selection du parametre par sw
    o_selection_fct <= i_sw(3 downto 2); -- mode de selection de la fonction par sw
    d_reset         <= i_btn(3);         -- pas de contionnement particulier sur reset
    o_reset         <= d_reset;          -- pas de contionnement particulier sur reset

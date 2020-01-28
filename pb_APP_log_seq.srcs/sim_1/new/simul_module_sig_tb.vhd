@@ -450,14 +450,10 @@ end process;
      BEGIN
         -- 
         s_reset   <= '0';
-        d_sel_par <= "00";
-        d_sel_fct <= "00";
         wait for c_mclk_Period;
         s_reset   <= '1';
         wait for c_mclk_Period;
         s_reset   <= '0';
-        
-        d_btn_cd <= "0000";
         d_btn(1) <= '1';
         
         d_sw <= "0000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
@@ -467,19 +463,19 @@ end process;
         d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
         
         d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
-        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
-        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
-        d_sw <= "0100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;  
+        d_sw <= "0101"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "0110"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "0111"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;  
         
         d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
-        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
-        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
-        d_sw <= "1000"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;              
+        d_sw <= "1001"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "1010"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "1011"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;              
         
         d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
-        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
-        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
-        d_sw <= "1100"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;   
+        d_sw <= "1101"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;
+        d_sw <= "1110"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;                  
+        d_sw <= "1111"; d_btn(0) <= '1'; wait for 20 us; d_btn(0) <= '0'; wait for 20 us;   
         --          
         d_sw <= "0000";
         d_sw <= "0000"; 
