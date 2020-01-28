@@ -33,13 +33,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity mux_param is
 Port (
-        param_1 : in STD_LOGIC_VECTOR(23 downto 0);
-        param_2 : in STD_LOGIC_VECTOR(23 downto 0);
-        param_3 : in STD_LOGIC_VECTOR(23 downto 0);
-        param_4 : in STD_LOGIC_VECTOR(23 downto 0);
+        param_1 : in STD_LOGIC_VECTOR(7 downto 0);
+        param_2 : in STD_LOGIC_VECTOR(7 downto 0);
+        param_3 : in STD_LOGIC_VECTOR(7 downto 0);
+        param_4 : in STD_LOGIC_VECTOR(7 downto 0);
         selection : in STD_LOGIC_VECTOR(1 downto 0);
         btn1 : in STD_LOGIC;
-        sortie : out STD_LOGIC_VECTOR(23 downto 0)
+        sortie : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end mux_param;
 

@@ -91,11 +91,11 @@ BEGIN
         case fsm_aff is
             when S1 =>
                 o_btn0 <= "00";
-            when S1 =>
+            when S2 =>
                 o_btn0 <= "01";
-            when S1 =>
+            when S3 =>
                 o_btn0 <= "10";
-            when S1 =>
+            when S4 =>
                 o_btn0 <= "11";
         end case;
     end process;

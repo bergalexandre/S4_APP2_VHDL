@@ -64,11 +64,13 @@ begin
     
     manage_state : PROCESS(i_write, i_read)
     begin
-        if rising_edge(i_write) then
+        if i_write'event and i_write = '1' then
             fifo_etat <= fifo_write;
-        elsif rising_edge(i_read) then
+        end if;
+        if i_read'event and i_read = '1' then
             fifo_etat <= fifo_read;
-        else
+        end if;
+        if(i_write = '0' and i_read = '0') then
             fifo_etat <= fifo_wait;
         end if;
     end PROCESS;

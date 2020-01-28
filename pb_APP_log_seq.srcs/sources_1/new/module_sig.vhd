@@ -118,13 +118,13 @@ end component;
 
 component mux_param is
 Port (
-        param_1 : in STD_LOGIC_VECTOR(23 downto 0);
-        param_2 : in STD_LOGIC_VECTOR(23 downto 0);
-        param_3 : in STD_LOGIC_VECTOR(23 downto 0);
-        param_4 : in STD_LOGIC_VECTOR(23 downto 0);
+        param_1 : in STD_LOGIC_VECTOR(7 downto 0);
+        param_2 : in STD_LOGIC_VECTOR(7 downto 0);
+        param_3 : in STD_LOGIC_VECTOR(7 downto 0);
+        param_4 : in STD_LOGIC_VECTOR(7 downto 0);
         selection : in STD_LOGIC_VECTOR(1 downto 0);
         btn1 : in STD_LOGIC;
-        sortie : out STD_LOGIC_VECTOR(23 downto 0)
+        sortie : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end component;
 
@@ -275,13 +275,13 @@ d_ech_left_out <= d_ech_left_dec; -- canal gauche non tranformé
         );
     
     inst_mux_param : mux_param Port map(
-            param_1 => d_param,
+            param_1 => d_ech_tst(23 downto 16),
             param_2 => d_param_1,
             param_3 => d_param_2,
             param_4 => d_param_3,
             selection => d_sel_par,
             btn1 => i_btn1,
-            sortie => o_param
+            sortie => d_param
         );
 
 
