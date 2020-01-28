@@ -34,14 +34,14 @@ generic (nbtn : integer := nbtn;  mode_simul: std_logic := '0');
 end component;
 
 
-    type fsm_etat_aff IS (S1,S2,S3,S4);
+    type fsm_etat_aff IS (S1,S1_off, S2, S2_off, S3, S3_off, S4, S4_off);
     SIGNAL fsm_aff, fsm_aff_suiv : fsm_etat_aff := S1;
     signal d_strobe_btn :    std_logic_vector (nbtn-1 downto 0);
     signal d_btn_cd     :    std_logic_vector (nbtn-1 downto 0); 
     signal d_reset      :    std_logic;
     signal o_btn0       :    std_logic_vector(1 downto 0);
     signal btn0         :    std_logic;
-    signal clk_btn0     :    std_logic;
+    signal clk_btn0     :    std_logic := '0';
    
 BEGIN 
     
@@ -55,38 +55,48 @@ BEGIN
         o_strobe_btn  => d_strobe_btn  
          );
  
+    clk_btn0 <= not clk_btn0 after 50us;
+ 
   MEF_btn0: process(clk_btn0)
     begin
         case fsm_aff is
             when S1 =>
-                if d_btn_cd(0) = '1' then
-                        fsm_aff_suiv <= S2;
-                    else
-                        fsm_aff_suiv <= S1;
+                if i_btn(0) = '1' then
+                        fsm_aff <= S1_off;
+                end if;
+            when S1_off =>
+                if i_btn(0) = '0' then
+                    fsm_aff <= S2;
                 end if;
             when S2 =>
-                if d_btn_cd(0) = '1' then
-                        fsm_aff_suiv <= S3;
-                    else
-                        fsm_aff_suiv <= S2;
+                if i_btn(0) = '1' then
+                        fsm_aff <= S2_off;
+                end if;
+            when S2_off =>
+                if i_btn(0) = '0' then
+                    fsm_aff <= S3;
                 end if;
             when S3 =>
-                if d_btn_cd(0) = '1' then
-                        fsm_aff_suiv <= S4;
-                    else
-                        fsm_aff_suiv <= S3;
+                if i_btn(0) = '1' then
+                        fsm_aff <= S3_off;
+                end if;
+            when S3_off =>
+                if i_btn(0) = '0' then
+                    fsm_aff <= S4;
                 end if;
             when S4 =>
-                if d_btn_cd(0) = '1' then
-                        fsm_aff_suiv <= S1;
-                    else
-                        fsm_aff_suiv <= S4;
+                if i_btn(0) = '1' then
+                        fsm_aff <= S4_off;
+                end if;
+            when S4_off =>
+                if i_btn(0) = '0' then
+                    fsm_aff <= S1;
                 end if;
         end case;
     end process;
     
     
-    MEF_output: process(clk_btn0)
+    MEF_output: process(fsm_aff)
     begin
         case fsm_aff is
             when S1 =>
@@ -97,10 +107,9 @@ BEGIN
                 o_btn0 <= "10";
             when S4 =>
                 o_btn0 <= "11";
+            when others =>
         end case;
     end process;
- 
-    clk_btn0 <= not clk_btn0 after 50ms;
 
  
    o_btn_cd        <= d_btn_cd;
