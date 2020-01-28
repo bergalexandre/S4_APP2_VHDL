@@ -60,20 +60,31 @@ BEGIN
 
 tb : PROCESS
 begin
-     wait for PERIOD; sim_input <=x"EF0005";   --> Remarquez que "vect_test" contient exactement la table de vérité.  
-     wait for PERIOD; sim_input <=x"003411";   --> Avec cette façon, on s'assure de ne pas manquer de cas
-     wait for PERIOD; sim_input <=x"03FFFF";
+     wait for PERIOD; sim_input <=x"003411";   
      wait for PERIOD; sim_input <=x"146555";
-     wait for PERIOD; sim_input <=x"3E2222";
-     wait for PERIOD; sim_input <=x"5D1111";
-     wait for PERIOD; sim_input <=x"200000";
-     wait for PERIOD; sim_input <=x"2A3333";
-     wait for PERIOD; sim_input <=x"DFDDDD";
      wait for PERIOD; sim_input <=x"1FFFFF";
-     wait for PERIOD; sim_input <=x"AA2222";
-     wait for PERIOD; sim_input <=x"98DDDD";
-     wait for PERIOD; sim_input <=x"800001";
-     wait for PERIOD; sim_input <=x"E1FFFF";
+     wait for PERIOD; sim_input <=x"D1FFFF";
+     wait for PERIOD; sim_input <=x"EF0005";
+     wait for PERIOD; sim_input <=x"F30005";
+     wait for PERIOD; sim_input <=x"FFFFFF";
+     
+     wait for PERIOD; sim_input <=x"200001";
+     wait for PERIOD; sim_input <=x"256666";
+     wait for PERIOD; sim_input <=x"46AAAA";
+     wait for PERIOD; sim_input <=x"5FFFFF";
+     wait for PERIOD; sim_input <=x"6FFFFF";
+     wait for PERIOD; sim_input <=x"7FFFFF";
+     
+     wait for PERIOD; sim_input <=x"91EEEE";
+     wait for PERIOD; sim_input <=x"A5DDDD";
+     wait for PERIOD; sim_input <=x"B33333";
+     wait for PERIOD; sim_input <=x"CC7777";
+     wait for PERIOD; sim_input <=x"DC7777";
+     wait for PERIOD; sim_input <=x"D8C888";
+     wait for PERIOD; sim_input <=x"C00000";
+     
+     wait for PERIOD; sim_input <=x"200000";
+     wait for PERIOD; sim_input <=x"800000";
      wait;
      end process;
 

@@ -44,137 +44,152 @@ architecture Behavioral of fct_douce is
 
     type table_fct_douce is array (integer range 0 to 95) of unsigned(23 downto 0);
     constant mem_fct_douce : table_fct_douce := (   
-    x"000000",
-    x"010259",
-    x"0202A9",
-    x"02FEFD",
-    x"03F592",
-    x"04E4E1",
-    x"05CBAE",
-    x"06A909",
-    x"077C4F",
-    x"08451F",
-    x"090357",
-    x"09B707",
-    x"0A6065",
-    x"0AFFC8",
-    x"0B9598",
-    x"0C2250",
-    x"0CA66F",
-    x"0D2278",
-    x"0D96F0",
-    x"0E0455",
-    x"0E6B23",
-    x"0ECBD1",
-    x"0F26CC",
-    x"0F7C7E",
-    x"0FCD47",
-    x"101981",
-    x"106180",
-    x"10A591",
-    x"10E5FC",
-    x"112302",
-    x"115CDF",
-    x"1193CC",
-    x"11C7FB",
-    x"11F99C",
-    x"1228DA",
-    x"1255DE",
-    x"1280CB",
-    x"12A9C5",
-    x"12D0EA",
-    x"12F658",
-    x"131A29",
-    x"133C76",
-    x"135D56",
-    x"137CDE",
-    x"139B22",
-    x"13B835",
-    x"13D427",
-    x"13EF08",
-    x"1408E7",
-    x"1421D2",
-    x"1439D5",
-    x"1450FD",
-    x"146755",
-    x"147CE7",
-    x"1491BC",
-    x"14A5DF",
-    x"14B958",
-    x"14CC2E",
-    x"14DE6A",
-    x"14F013",
-    x"15012E",
-    x"1511C4",
-    x"1521D9",
-    x"153173",
-    x"154098",
-    x"154F4C",
-    x"155D94",
-    x"156B75",
-    x"1578F3",
-    x"158612",
-    x"1592D6",
-    x"159F42",
-    x"15AB5A",
-    x"15B721",
-    x"15C29A",
-    x"15CDC8",
-    x"15D8AE",
-    x"15E34E",
-    x"15EDAC",
-    x"15F7C9",
-    x"1601A8",
-    x"160B4A",
-    x"1614B3",
-    x"161DE4",
-    x"1626DF",
-    x"162FA5",
-    x"163839",
-    x"16409C",
-    x"1648D0",
-    x"1650D6",
-    x"1658B0",
-    x"16605E",
-    x"1667E4",
-    x"166F41",
-    x"167677",
-    x"167D88"
+		x"200000",
+		x"21025A",
+		x"2202A9",
+		x"22FEFD",
+		x"23F592",
+		x"24E4E1",
+		x"25CBAE",
+		x"26A909",
+		x"277C4F",
+		x"28451F",
+		x"290357",
+		x"29B707",
+		x"2A6065",
+		x"2AFFC8",
+		x"2B9598",
+		x"2C2250",
+		x"2CA66F",
+		x"2D2279",
+		x"2D96F0",
+		x"2E0455",
+		x"2E6B24",
+		x"2ECBD1",
+		x"2F26CD",
+		x"2F7C7E",
+		x"2FCD47",
+		x"301981",
+		x"306180",
+		x"30A591",
+		x"30E5FC",
+		x"312302",
+		x"315CDF",
+		x"3193CC",
+		x"31C7FB",
+		x"31F99C",
+		x"3228DB",
+		x"3255DE",
+		x"3280CC",
+		x"32A9C5",
+		x"32D0EA",
+		x"32F658",
+		x"331A29",
+		x"333C76",
+		x"335D56",
+		x"337CDE",
+		x"339B22",
+		x"33B835",
+		x"33D427",
+		x"33EF08",
+		x"3408E7",
+		x"3421D2",
+		x"3439D5",
+		x"3450FD",
+		x"346755",
+		x"347CE7",
+		x"3491BC",
+		x"34A5DF",
+		x"34B958",
+		x"34CC2E",
+		x"34DE6A",
+		x"34F013",
+		x"35012F",
+		x"3511C4",
+		x"3521D9",
+		x"353173",
+		x"354098",
+		x"354F4C",
+		x"355D94",
+		x"356B75",
+		x"3578F3",
+		x"358612",
+		x"3592D6",
+		x"359F42",
+		x"35AB5A",
+		x"35B721",
+		x"35C29A",
+		x"35CDC8",
+		x"35D8AE",
+		x"35E34F",
+		x"35EDAC",
+		x"35F7C9",
+		x"3601A8",
+		x"360B4B",
+		x"3614B3",
+		x"361DE4",
+		x"3626DF",
+		x"362FA5",
+		x"363839",
+		x"36409C",
+		x"3648D0",
+		x"3650D6",
+		x"3658B0",
+		x"36605F",
+		x"3667E4",
+		x"366F41",
+		x"367677",
+		x"367D88"
+
 
     --others => x"000000" 
     );
     
-    signal index : signed(6 downto 0) := "0000000";
-    signal sim_i_dat24 : signed(23 downto 0) := x"000000";
+    signal index : signed(7 downto 0) := "00000000";
+    signal index_neg : signed(7 downto 0) := "00000000";
+    
+    signal sim_i_dat24_base : signed(23 downto 0) := x"000000";
+    signal sim_i_dat24_second : signed(23 downto 0) := x"000000";
+    signal sim_abs : signed(23 downto 0) := x"000000";
+
     
     
     signal sortie : unsigned(23 downto 0) := x"000000";
-    signal sortie2 : STD_LOGIC_VECTOR(23 downto 0) := x"000000";
+    signal sortie_neg : STD_LOGIC_VECTOR(27 downto 0) := "0000000000000000000000000000";
     
+    constant seuil_test : STD_LOGIC_VECTOR(7 downto 0) := "00100000";
     
     constant ZERO : STD_LOGIC_VECTOR(7 downto 0) := x"00";
     constant UNITE : STD_LOGIC_VECTOR(7 downto 0) := x"01";
     constant UNITE_24b : unsigned(23 downto 0) := x"000001";
     constant SEUIL : unsigned(23 downto 0) := x"200000";
-    constant SEUIL_C2 : unsigned(23 downto 0) := x"d00000"; 
+    constant SEUIL_C2 : unsigned(23 downto 0) := x"E00000"; 
     
     
 begin
+    sim_i_dat24_base <= signed(i_dat24);
+    sim_i_dat24_second <= signed(i_dat24) - signed(SEUIL);
+    sim_abs <= abs(sim_i_dat24_second);
+    index <= signed(sim_abs(23 downto 16));
+   -- index_neg <=
     
-    sim_i_dat24 <= signed(i_dat24);
-    index <= abs(signed(sim_i_dat24(22 downto 16)));
-
     
-    simple_function: process(sim_i_dat24, index)
+    
+--and to_integer(unsigned(sim_i_dat24_base(23 downto 16))) < 96
+    
+    simple_function: process(sim_i_dat24_second, sim_i_dat24_base, index)
     begin
-        if abs(signed(sim_i_dat24)) < signed(SEUIL) then
-            sortie <= unsigned(sim_i_dat24);
-        elsif to_integer(sim_i_dat24(23 downto 16)) > 96 then
-            sortie <= SEUIL_C2 + not (mem_fct_douce(to_integer(unsigned(index)))) + UNITE_24b;
-        else
-            sortie <=  SEUIL + mem_fct_douce(to_integer(unsigned(index(6 downto 0))));
+        if abs(signed(i_dat24)) < signed(SEUIL) then
+            sortie <= unsigned(sim_i_dat24_base);
+        elsif index > 95 then
+            --sortie <= x"200000";
+            sortie <= not (mem_fct_douce(to_integer(unsigned(128- index)))) + UNITE_24b;
+        elsif index < 96 then
+            sortie <=  mem_fct_douce(to_integer(unsigned(index(6 downto 0))));
         end if;
     end PROCESS;
+    
+
     
     o_dat24 <= STD_LOGIC_VECTOR(sortie);
     
