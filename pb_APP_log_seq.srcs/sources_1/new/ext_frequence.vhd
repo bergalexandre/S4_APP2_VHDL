@@ -68,10 +68,8 @@ begin
             if (i_reset ='1') then
                  EtatCourant <= s0;
             end if;
-            if rising_edge(i_lrc) then
-                 EtatCourant <= prochainEtat;
-                 etatPrecedant <= EtatCourant;
-            end if;
+         EtatCourant <= prochainEtat;
+         etatPrecedant <= EtatCourant;
     end process;
 
 
@@ -127,7 +125,7 @@ begin
                 when s0 =>
                     case etatPrecedant is
                         when s5 =>
-                            valeur_retenue    <= compteur;
+                            valeur_retenue    <= compteur+3;
                             compteur   <= x"00";
                         when s0 =>
                             compteur   <= std_logic_vector(signed(compteur) + 1);
@@ -141,7 +139,7 @@ begin
                 when s3 =>
                     case etatPrecedant is
                         when s2 =>
-                            compteur   <= std_logic_vector(signed(compteur) + 1);
+                            compteur   <= std_logic_vector(signed(compteur) + 3);
                         when s3 =>
                             compteur   <= std_logic_vector(signed(compteur) + 1);
                         when s4 =>

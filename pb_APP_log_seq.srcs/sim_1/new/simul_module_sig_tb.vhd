@@ -367,7 +367,7 @@ begin
    end if;
 end process;
 
-frequence_clk <= not frequence_clk after 208333ns/2;
+frequence_clk <= not frequence_clk after 2ms;
 
 sim_entree_G : process (s_reset, frequence_clk) 
 begin
