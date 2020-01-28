@@ -70,88 +70,91 @@ begin
             end if;
             if rising_edge(i_lrc) then
                  EtatCourant <= prochainEtat;
+                 etatPrecedant <= EtatCourant;
             end if;
     end process;
 
 
     -- conditions de transitions
-    transitions: process(EtatCourant)
+    transitions: process(i_lrc)
     begin
-        case EtatCourant is
-            when s0 =>
-                if signed(i_dat24) > 0 then
-                    prochainEtat <= s1;
-                else
-                    prochainEtat <= s0;
-                end if;
-            when s1 =>
-                if signed(i_dat24) > 0 then
-                    prochainEtat <= s2;
-                else
-                    prochainEtat <= s0;
-                end if;
-            when s2 =>
-                if signed(i_dat24) > 0 then
-                    prochainEtat <= s3;
-                else
-                    prochainEtat <= s0;
-                end if;
-            when s3 =>
-                if signed(i_dat24) > 0 then
-                    prochainEtat <= s3;
-                else
-                    prochainEtat <= s4;
-                end if;
-            when s4 =>
-                if signed(i_dat24) > 0 then
-                    prochainEtat <= s3;
-                else
-                    prochainEtat <= s5;
-                end if;
-            when s5 =>
-                if signed(i_dat24) > 0 then
-                    prochainEtat <= s3;
-                else
-                    prochainEtat <= s0;
-                end if;
-        end case;
+        if rising_edge(i_lrc) then
+            case EtatCourant is
+                when s0 =>
+                    if signed(i_dat24) > 0 then
+                        prochainEtat <= s1;
+                    else
+                        prochainEtat <= s0;
+                    end if;
+                when s1 =>
+                    if signed(i_dat24) > 0 then
+                        prochainEtat <= s2;
+                    else
+                        prochainEtat <= s0;
+                    end if;
+                when s2 =>
+                    if signed(i_dat24) > 0 then
+                        prochainEtat <= s3;
+                    else
+                        prochainEtat <= s0;
+                    end if;
+                when s3 =>
+                    if signed(i_dat24) > 0 then
+                        prochainEtat <= s3;
+                    else
+                        prochainEtat <= s4;
+                    end if;
+                when s4 =>
+                    if signed(i_dat24) > 0 then
+                        prochainEtat <= s3;
+                    else
+                        prochainEtat <= s5;
+                    end if;
+                when s5 =>
+                    if signed(i_dat24) > 0 then
+                        prochainEtat <= s3;
+                    else
+                        prochainEtat <= s0;
+                    end if;
+            end case;
+        end if;
     end process;
 
     sortie: process(i_lrc)
     begin
-        etatPrecedant <= EtatCourant;
-        case EtatCourant is
-            when s0 =>
-                case etatPrecedant is
-                    when s5 =>
-                        valeur_retenue    <= compteur;
-                        compteur   <= x"00";
-                    when s0 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 1);
-                    when s1 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 2);
-                    when s2 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 3);
-                    when others =>
-                        compteur   <= compteur;  
-                end case;   
-            when s3 =>
-                case etatPrecedant is
-                    when s2 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 1);
-                    when s3 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 1);
-                    when s4 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 2);
-                    when s5 =>
-                        compteur   <= std_logic_vector(signed(compteur) + 3);
-                    when others =>
-                        compteur   <= compteur; 
-                end case;
-            when others =>
-                compteur <= compteur;
-
-        end case;
+        if rising_edge(i_lrc) then
+            case EtatCourant is
+                when s0 =>
+                    case etatPrecedant is
+                        when s5 =>
+                            valeur_retenue    <= compteur;
+                            compteur   <= x"00";
+                        when s0 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 1);
+                        when s1 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 2);
+                        when s2 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 3);
+                        when others =>
+                            compteur   <= compteur;  
+                    end case;   
+                when s3 =>
+                    case etatPrecedant is
+                        when s2 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 1);
+                        when s3 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 1);
+                        when s4 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 2);
+                        when s5 =>
+                            compteur   <= std_logic_vector(signed(compteur) + 3);
+                        when others =>
+                            compteur   <= compteur; 
+                    end case;
+                when others =>
+                    compteur <= compteur;
+            end case;
+        end if;
     end process;
     
     o_dat8 <= valeur_retenue;

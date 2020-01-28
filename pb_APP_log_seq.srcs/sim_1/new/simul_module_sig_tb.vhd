@@ -54,6 +54,17 @@ component decodeur_i2s_v1b
 );
 end component;
 
+component MEF_frequence is
+   Port ( 
+        i_dat24     : in std_logic_vector(23 downto 0);
+        i_bclk      : in std_logic;
+        i_reset     : in std_logic; 
+        i_lrc       : in std_logic;
+        i_cpt_bits  : in std_logic_vector(6 downto 0);
+        o_dat8     : out std_logic_vector(7 downto 0) 
+);
+end component;
+
 component param_amplitude is
     Port ( 
         i_value     : in STD_LOGIC_VECTOR(23 downto 0);
@@ -88,9 +99,9 @@ component param_puissance is
         o_aff : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end component;
-signal puissance : STD_LOGIC_VECTOR(7 downto 0) := (others=>'0');
+signal puissance, frequence : STD_LOGIC_VECTOR(7 downto 0) := (others=>'0');
 signal puissance_16bits : STD_LOGIC_VECTOR(15 downto 0) := (others=>'0');
-  
+
 --type table_forme is array (integer range 0 to 255) of std_logic_vector(23 downto 0);
 type table_forme is array (integer range 0 to 47) of std_logic_vector(23 downto 0);
 constant mem_forme_onde_R : table_forme := (   
@@ -216,6 +227,7 @@ x"A00001"
     signal   d_ac_pblrc    : std_logic := '0';  -- I²S (Playback Channel Clock) DAC Sampling Rate Clock,
     signal   d_ac_recdat   : std_logic := '0';  -- I²S (Record Data) 
     signal   d_ac_reclrc   : std_logic := '0';  -- I²S (Record Channel Clock)   ADC Sampling Rate Clock,
+    signal frequence_clk : std_logic := '0';
     
  -- source I2S simulee
     signal  d_val_ech_L    : std_logic_vector(23 downto 0) := (others =>'0') ;  -- ech source simulee canal gauche
@@ -241,6 +253,7 @@ x"A00001"
     -- La durée d'une période reclrc est de 64,5 périodes de bclk ... ARRONDI a 64 pour simul
     --
     
+    constant clk_48khz : time := 20.8us;
     constant c_mclk_Period       : time :=  80.715 ns;  -- 12.288 MHz
     constant c_clk_p_Period      : time :=  8 ns;  -- 125 MHz
  
@@ -257,7 +270,7 @@ begin
       i_reset     =>  s_reset,
       i_lrc       =>  d_ac_pblrc,
       i_dat_left  =>  d_val_ech_L,
-      i_dat_right =>  x"7fffff",
+      i_dat_right =>  d_val_ech_R,--x"7fffff",
       o_dat       =>  d_ac_recdat
   );
 
@@ -288,16 +301,25 @@ begin
           o_dat_right =>  d_ech_reg_right,
           o_str_dat   =>  o_str_dat
       );
+
+    inst_param_frequence : MEF_frequence Port map( 
+            i_dat24     => d_ech_reg_left,
+            i_bclk      => d_ac_bclk,
+            i_reset     => s_reset, 
+            i_lrc       => d_ac_pblrc,
+            i_cpt_bits  => "0000000",
+            o_dat8      => frequence 
+    );
     
     inst_param_amplitude : param_amplitude port map(
         i_value => d_ech_reg_right,
-        i_dat_str => o_str_dat,
+        i_dat_str => d_ac_pblrc,
         o_value => amplitude
     );    
     
     inst_param_puissance : param_puissance Port map(
         i_value => d_ech_reg_right,
-        i_dat_str => o_str_dat,
+        i_dat_str => d_ac_pblrc,
         i_puissance => puissance_16bits, 
         o_puissance => puissance_16bits,
         o_aff => puissance
@@ -345,19 +367,18 @@ begin
    end if;
 end process;
 
-sim_entree_G : process (s_reset, d_ac_pblrc) 
+frequence_clk <= not frequence_clk after 208333ns/2;
+
+sim_entree_G : process (s_reset, frequence_clk) 
 begin
    if(s_reset = '1') then  -- Init/reset
       compt_gen_L <= x"00";
       d_val_ech_L <= X"000000";
    else
-      if(d_ac_pblrc'event and d_ac_pblrc = '0') then
-         d_val_ech_L <= mem_forme_onde_L(to_integer(compt_gen_L));
-         if (compt_gen_L = mem_forme_onde_L'length-1) then
-           compt_gen_L <= x"00";
-         else
-           compt_gen_L <= compt_gen_L + 1;
-         end if;           
+      if(frequence_clk'event and frequence_clk = '1') then
+            d_val_ech_L <= x"5f0000";
+      elsif (frequence_clk'event and frequence_clk = '0') then
+            d_val_ech_L <= x"A00001";
       end if;        
    end if;
 end process;
@@ -398,30 +419,31 @@ end process;
         s_reset   <= '1';
         wait for c_mclk_Period;
         s_reset   <= '0';
-        d_sel_fct <= "00";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "00";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "00";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "00";  d_sel_par <= "11";  wait for 40 us; 
-        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
-        --
-        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "01";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "01";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "01";  d_sel_par <= "11";  wait for 40 us;  
-        --
-        d_sel_fct <= "10";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "10";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "10";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "10";  d_sel_par <= "11";  wait for 40 us;              
-        --
-        d_sel_fct <= "11";  d_sel_par <= "00";  wait for 40 us;
-        d_sel_fct <= "11";  d_sel_par <= "01";  wait for 40 us;
-        d_sel_fct <= "11";  d_sel_par <= "10";  wait for 40 us;                  
-        d_sel_fct <= "11";  d_sel_par <= "11";  wait for 40 us;  
-        --          
-        d_sel_fct <= "00";
-        d_sel_par <= "00"; 
-        wait for 40 us;   
+        
+--        d_sel_fct <= "00";  d_sel_par <= "00";  wait for 40 us;
+--        d_sel_fct <= "00";  d_sel_par <= "01";  wait for 40 us;
+--        d_sel_fct <= "00";  d_sel_par <= "10";  wait for 40 us;                  
+--        d_sel_fct <= "00";  d_sel_par <= "11";  wait for 40 us; 
+--        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
+--        --
+--        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
+--        d_sel_fct <= "01";  d_sel_par <= "01";  wait for 40 us;
+--        d_sel_fct <= "01";  d_sel_par <= "10";  wait for 40 us;                  
+--        d_sel_fct <= "01";  d_sel_par <= "11";  wait for 40 us;  
+--        --
+--        d_sel_fct <= "10";  d_sel_par <= "00";  wait for 40 us;
+--        d_sel_fct <= "10";  d_sel_par <= "01";  wait for 40 us;
+--        d_sel_fct <= "10";  d_sel_par <= "10";  wait for 40 us;                  
+--        d_sel_fct <= "10";  d_sel_par <= "11";  wait for 40 us;              
+--        --
+--        d_sel_fct <= "11";  d_sel_par <= "00";  wait for 40 us;
+--        d_sel_fct <= "11";  d_sel_par <= "01";  wait for 40 us;
+--        d_sel_fct <= "11";  d_sel_par <= "10";  wait for 40 us;                  
+--        d_sel_fct <= "11";  d_sel_par <= "11";  wait for 40 us;  
+--        --          
+--        d_sel_fct <= "00";
+--        d_sel_par <= "00"; 
+--        wait for 40 us;   
                  
         WAIT; -- will wait forever
      END PROCESS;
