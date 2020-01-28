@@ -58,6 +58,8 @@ begin
                 sortie <= fct_3;
             when "11" =>
                 sortie <= fct_4;
+            when others =>
+                sortie <= fct_1;
         end case;
     end PROCESS;
 

@@ -156,6 +156,8 @@ component codeur_i2s_vsb
 
     signal d_sel_fct    :    std_logic_vector (1 downto 0);
     signal d_sel_par    :    std_logic_vector (1 downto 0);
+    
+    signal d_btn1           : std_logic;
  
     signal d_bclk            : std_logic;
     signal reset             : std_logic;
@@ -189,7 +191,7 @@ component codeur_i2s_vsb
 --    Description (sur une carte Zybo)
 ---------------------------------------------------------------------------------------------
 begin
-
+     d_btn1      <= i_btn1;
      d_bclk      <= i_bclk;
      reset       <= i_reset;
      d_lrc       <= i_lrc;
@@ -280,7 +282,7 @@ d_ech_left_out <= d_ech_left_dec; -- canal gauche non tranformé
             param_3 => d_param_2,
             param_4 => d_param_3,
             selection => d_sel_par,
-            btn1 => i_btn1,
+            btn1 => d_btn1,
             sortie => d_param
         );
 

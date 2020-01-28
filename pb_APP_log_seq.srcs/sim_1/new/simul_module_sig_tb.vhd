@@ -81,6 +81,7 @@ component module_sig
     i_bclk      : in    std_logic;    -- bit clock ... I2S digital audio clk  ~  3.1 MHz 
     i_lrc       : in    std_logic;    -- I²S (Playback Channel Clock)         ~ 48.3 KHz (~ 20.8 us)
     i_recdat    : in    std_logic;    -- I²S (Record Data)
+    i_btn1      : in    std_logic;
     o_pbdat     : out   std_logic;    -- I²S (Playback Data)
     --
     i_sel_fct   : in    std_logic_vector (1 downto 0); -- selecteur de la fonction
@@ -282,6 +283,7 @@ begin
         i_bclk      =>  d_ac_bclk,
         i_lrc       =>  d_ac_pblrc,
         i_recdat    =>  d_ac_recdat,
+        i_btn1      =>  '1',
         o_pbdat     =>  d_sig_pbdat,
         i_sel_fct   =>  d_sel_fct,
         i_sel_par   =>  d_sel_par,
@@ -369,16 +371,19 @@ end process;
 
 frequence_clk <= not frequence_clk after 2ms;
 
-sim_entree_G : process (s_reset, frequence_clk) 
+sim_entree_G : process (s_reset, d_ac_pblrc) 
 begin
    if(s_reset = '1') then  -- Init/reset
       compt_gen_L <= x"00";
       d_val_ech_L <= X"000000";
    else
-      if(frequence_clk'event and frequence_clk = '1') then
-            d_val_ech_L <= x"5f0000";
-      elsif (frequence_clk'event and frequence_clk = '0') then
-            d_val_ech_L <= x"A00001";
+      if(d_ac_pblrc'event and d_ac_pblrc = '0') then
+         d_val_ech_L <= mem_forme_onde_L(to_integer(compt_gen_L));
+         if (compt_gen_L = mem_forme_onde_L'length-1) then
+           compt_gen_L <= x"00";
+         else
+           compt_gen_L <= compt_gen_L + 1;
+         end if;           
       end if;        
    end if;
 end process;
@@ -420,30 +425,30 @@ end process;
         wait for c_mclk_Period;
         s_reset   <= '0';
         
---        d_sel_fct <= "00";  d_sel_par <= "00";  wait for 40 us;
---        d_sel_fct <= "00";  d_sel_par <= "01";  wait for 40 us;
---        d_sel_fct <= "00";  d_sel_par <= "10";  wait for 40 us;                  
---        d_sel_fct <= "00";  d_sel_par <= "11";  wait for 40 us; 
---        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
---        --
---        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
---        d_sel_fct <= "01";  d_sel_par <= "01";  wait for 40 us;
---        d_sel_fct <= "01";  d_sel_par <= "10";  wait for 40 us;                  
---        d_sel_fct <= "01";  d_sel_par <= "11";  wait for 40 us;  
---        --
---        d_sel_fct <= "10";  d_sel_par <= "00";  wait for 40 us;
---        d_sel_fct <= "10";  d_sel_par <= "01";  wait for 40 us;
---        d_sel_fct <= "10";  d_sel_par <= "10";  wait for 40 us;                  
---        d_sel_fct <= "10";  d_sel_par <= "11";  wait for 40 us;              
---        --
---        d_sel_fct <= "11";  d_sel_par <= "00";  wait for 40 us;
---        d_sel_fct <= "11";  d_sel_par <= "01";  wait for 40 us;
---        d_sel_fct <= "11";  d_sel_par <= "10";  wait for 40 us;                  
---        d_sel_fct <= "11";  d_sel_par <= "11";  wait for 40 us;  
---        --          
---        d_sel_fct <= "00";
---        d_sel_par <= "00"; 
---        wait for 40 us;   
+        d_sel_fct <= "00";  d_sel_par <= "00";  wait for 40 us;
+        d_sel_fct <= "00";  d_sel_par <= "01";  wait for 40 us;
+        d_sel_fct <= "00";  d_sel_par <= "10";  wait for 40 us;                  
+        d_sel_fct <= "00";  d_sel_par <= "11";  wait for 40 us; 
+        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
+        --
+        d_sel_fct <= "01";  d_sel_par <= "00";  wait for 40 us;
+        d_sel_fct <= "01";  d_sel_par <= "01";  wait for 40 us;
+        d_sel_fct <= "01";  d_sel_par <= "10";  wait for 40 us;                  
+        d_sel_fct <= "01";  d_sel_par <= "11";  wait for 40 us;  
+        --
+        d_sel_fct <= "10";  d_sel_par <= "00";  wait for 40 us;
+        d_sel_fct <= "10";  d_sel_par <= "01";  wait for 40 us;
+        d_sel_fct <= "10";  d_sel_par <= "10";  wait for 40 us;                  
+        d_sel_fct <= "10";  d_sel_par <= "11";  wait for 40 us;              
+        --
+        d_sel_fct <= "11";  d_sel_par <= "00";  wait for 40 us;
+        d_sel_fct <= "11";  d_sel_par <= "01";  wait for 40 us;
+        d_sel_fct <= "11";  d_sel_par <= "10";  wait for 40 us;                  
+        d_sel_fct <= "11";  d_sel_par <= "11";  wait for 40 us;  
+        --          
+        d_sel_fct <= "00";
+        d_sel_par <= "00"; 
+        wait for 40 us;   
                  
         WAIT; -- will wait forever
      END PROCESS;

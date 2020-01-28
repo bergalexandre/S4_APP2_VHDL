@@ -60,6 +60,8 @@ begin
                 sortie <= param_3;
             when "11" =>
                 sortie <= param_4;
+            when others =>
+                sortie <= param_1;
         end case;
     end PROCESS;
 
