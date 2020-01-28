@@ -63,7 +63,6 @@ begin
      wait for PERIOD; sim_input <=x"003411";   
      wait for PERIOD; sim_input <=x"146555";
      wait for PERIOD; sim_input <=x"1FFFFF";
-     wait for PERIOD; sim_input <=x"D1FFFF";
      wait for PERIOD; sim_input <=x"EF0005";
      wait for PERIOD; sim_input <=x"F30005";
      wait for PERIOD; sim_input <=x"FFFFFF";
@@ -82,9 +81,9 @@ begin
      wait for PERIOD; sim_input <=x"DC7777";
      wait for PERIOD; sim_input <=x"D8C888";
      wait for PERIOD; sim_input <=x"C00000";
+     wait for PERIOD; sim_input <=x"823333";
      
-     wait for PERIOD; sim_input <=x"200000";
-     wait for PERIOD; sim_input <=x"800000";
+
      wait;
      end process;
 
