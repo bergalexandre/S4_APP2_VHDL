@@ -116,6 +116,7 @@ component module_sig
         i_bclk      : in    std_logic;    -- bit clock ... I2S digital audio clk  ~  3.1 MHz 
         i_lrc       : in    std_logic;    -- I²S (Playback Channel Clock)         ~ 48.3 KHz (~ 20.8 us)
         i_recdat    : in    std_logic;    -- I²S (Record Data)
+        i_btn1      : in    std_logic;
         o_pbdat     : out   std_logic;    -- I²S (Playback Data)
         --
         i_sel_fct   : in    std_logic_vector (1 downto 0);
@@ -315,6 +316,7 @@ inst_module_sig: module_sig
             i_bclk       => d_ac_bclk,
             i_lrc        => d_ac_reclrc,
             i_recdat     => d_ac_recdat,
+            i_btn1       => d_btn(1),
             o_pbdat      => d_ac_pbdat,
              i_sel_fct   => d_sel_fct,
             i_sel_par    => d_sel_par,
